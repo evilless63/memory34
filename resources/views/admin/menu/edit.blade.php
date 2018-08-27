@@ -52,6 +52,7 @@
                                 
                             </select>
                         </div>
+
                         <div class="form-check">
                             <input type="hidden" name="is_active" value="0">
                             <input type="checkbox" class="form-check-input" id="is_active" name="is_active" {{ $menu->is_active == 1 ? 'checked' : ''}} value="1">

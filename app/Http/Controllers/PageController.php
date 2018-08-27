@@ -11,7 +11,7 @@ class PageController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => array('show')]);
     }
 
     /**
@@ -59,7 +59,8 @@ class PageController extends Controller
      */
     public function show($id)
     {
-        //
+        $page = Page::findorfail($id);
+        return view('admin.page.show', compact('page'));
     }
 
     /**
@@ -70,7 +71,8 @@ class PageController extends Controller
      */
     public function edit($id)
     {
-        //
+        $page = Page::findorfail($id);
+        return view('admin.page.edit', compact('page'));
     }
 
     /**
@@ -82,7 +84,11 @@ class PageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validateRequest($request);
+
+        Page::where('id', $id)->update($request->except('_method','_token'));  
+
+        return redirect(route('page.index'));
     }
 
     /**

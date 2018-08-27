@@ -26,11 +26,11 @@
                             <input type="text" class="form-control" id="title" name="title" aria-describedby="title" placeholder="Наименование">
                         </div>
                         <div class="form-group">
-                            <label for="meta_desc">Мета описание (отображается как описание в поиске Google, Yandex)</label>
+                            <label for="meta_desc">Мета описание (отображается как описание в поиске Google, Yandex)  - не более 100 - 140 символов<</label>
                             <input type="text" class="form-control" id="meta_desc" name="meta_desc" aria-describedby="meta_desc" placeholder="Мета описание">
                         </div>
                         <div class="form-group">
-                            <label for="meta_keys">Мета ключи (служит для определеняи страницы поисковиками Google, Yandex)</label>
+                            <label for="meta_keys">Мета ключи (служит для определеняи страницы поисковиками Google, Yandex)  - не более 20 слов через запятую</label>
                             <input type="text" class="form-control" id="meta_keys" name="meta_keys" aria-describedby="meta_keys" placeholder="Мета описание">
                         </div>
                         <div class="form-group">

@@ -34,6 +34,15 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="parent_id">Ссылка на страницу</label>
+                            <select class="form-control" id="path" name="path" value="1">
+                                <option value="">Не ссылается на страницу</option>
+                                @foreach($pages as $page)
+                                    <option value="{{ route('page.show', $page->id) }}">{{ $page->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1">
                             <label class="form-check-label" for="is_active">Пункт активен</label>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Menu;
+use App\Page;
 use Validator;
 use Menu as LavMenu;
 
@@ -12,7 +13,7 @@ class MenuController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => array('show')]);
     }
 
     /**
@@ -35,7 +36,8 @@ class MenuController extends Controller
     public function create()
     {
         $parent_menus = Menu::all();
-        return view('admin.menu.create', compact('parent_menus'));
+        $pages = Page::all();
+        return view('admin.menu.create', compact('parent_menus','pages'));
     }
 
     /**
