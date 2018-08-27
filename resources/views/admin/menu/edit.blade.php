@@ -53,6 +53,32 @@
                             </select>
                         </div>
 
+                        <div class="form-group">
+                            @if($actual_page === Null)
+                                <label for="path">Ссылка на страницу</label>
+                            @else
+                                <label for="path">Текущая ссылка на страницу - <strong>{{ $actual_page->title }}</strong>, новая ссылка на страницу:</label>
+                            @endif
+
+                            <select class="form-control" id="path" name="path" value="1">
+
+                                @if($actual_page === Null)
+                                    <option value="">Нет родительского пункта</option>
+                                    @foreach($all_pages as $page)
+                                        <option value="{{ route('page.show', $page->id) }}">{{ $page->title }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="{{ route('page.show', $actual_page->id) }}">{{ $actual_page->title }}</option>
+                                    @foreach($all_pages as $page)
+                                        @if ($page->id <> $actual_page->id)
+                                        <option value="{{ route('page.show', $page->id) }}">{{ $page->title }}</option>
+                                        @endif
+                                    @endforeach
+                                @endif
+                                
+                            </select>
+                            </div>
+
                         <div class="form-check">
                             <input type="hidden" name="is_active" value="0">
                             <input type="checkbox" class="form-check-input" id="is_active" name="is_active" {{ $menu->is_active == 1 ? 'checked' : ''}} value="1">

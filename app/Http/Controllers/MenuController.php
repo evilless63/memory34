@@ -78,7 +78,11 @@ class MenuController extends Controller
         $menu = Menu::findorfail($id);
         $parent_menu_actual = Menu::find($menu->parent_id);
         $parent_menus = Menu::where('id', '<>', $id )->get();
-        return view('admin.menu.edit', compact('menu','parent_menus','parent_menu_actual'));
+
+        $actual_page = Page::where('menu_id', $id)->get();
+        $all_pages = Page::where('menu_id', '<>', $id)->get();
+        dd($all_pages);
+        return view('admin.menu.edit', compact('menu','parent_menus','parent_menu_actual','actual_page','all_pages'));
     }
 
     /**
@@ -109,7 +113,15 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Menu::findorfail($id)->delete();
+        $children = Menu::where('parent_id', $id)->get();
+
+        foreach($children as $child) {
+            $child->parent_id = null;
+            $child->update();
+        }
+
+        return redirect(route('menu.index'));
     }
 
     public function buildMenu ($arrMenu){
