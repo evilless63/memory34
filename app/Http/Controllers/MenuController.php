@@ -47,15 +47,7 @@ class MenuController extends Controller
     public function store(Request $request)
     {
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect(route('menu.create'))
-                        ->withErrors($validator)
-                        ->withInput();
-        }
+        $this->validateRequest($request);
 
         Menu::create($request->all());   
 
@@ -96,15 +88,8 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect(route('menu.create'))
-                        ->withErrors($validator)
-                        ->withInput();
-        }
+        
+        $this->validateRequest($request);
 
         Menu::where('id', $id)->update($request->except('_method','_token'));  
 
@@ -167,5 +152,18 @@ class MenuController extends Controller
             $this->setRequisites($child->id, $reqArray);
 
         } 
+    }
+
+    protected function validateRequest($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect(route('menu.create'))
+                        ->withErrors($validator)
+                        ->withInput();
+        }
     }
 }

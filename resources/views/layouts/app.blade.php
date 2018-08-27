@@ -19,6 +19,17 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            CKEDITOR.replace('pageDescEditor', {
+                language: 'ru',
+                uiColor: '#9AB8F3'
+            });
+        });
+        window.onload = loadCkeditor();
+    </script>
 </head>
 <body>
     <div id="app">

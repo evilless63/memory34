@@ -12,7 +12,7 @@
                         <ul id="nav" class="menu">
                         @foreach($pages as $page)
                             <li>
-                                <a href="route('page.edit', $page->id)">{{ $page->title }}</a>
+                                <a href="{{ route('page.edit', $page->id) }}">{{ $page->title }}</a>
                             </li>
                         @endforeach
                         </ul>

@@ -165,6 +165,12 @@ return [
         //Емельянов В.Ю. 27.08.2018 - Провайдер меню
         Lavary\Menu\ServiceProvider::class,
 
+        //Емельянов В.Ю. 27.08.2018 - Провайдер транслитератора
+        ElForastero\Transliterate\TransliterationServiceProvider::class,
+
+        //Емельянов В.Ю. 27.08.2018 - Провайдер CKEditor
+        Unisharp\Ckeditor\ServiceProvider::class,
+
     ],
 
     /*
@@ -216,6 +222,9 @@ return [
 
         //Емельянов В.Ю. 27.08.2018 - Алиас меню
         'Menu'      => Lavary\Menu\Facade::class,
+
+        //Емельянов В.Ю. 27.08.2018 - Алиас транслитератора
+        'Transliterate' => ElForastero\Transliterate\TransliterationFacade::class,
 
     ],
 

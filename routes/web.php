@@ -21,3 +21,5 @@ Route::resource('menu','MenuController');
 Route::resource('page','PageController');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::post('/admin/page/upload-image', 'PageController@uploadImage');

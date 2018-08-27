@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Page;
+use Validator;
+use Transliterate;
 
 class PageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +32,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.page.create');
     }
 
     /**
@@ -36,7 +43,12 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this->validateRequest($request);
+
+        Page::create(array_merge($request->all(), ['slug' => $this->makeSlug($request)]));   
+
+        return redirect(route('page.index'));
     }
 
     /**
@@ -82,5 +94,60 @@ class PageController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    protected function makeSlug($request)
+    {
+
+        $slug = Transliterate::make($request->title, ['type' => 'url', 'lowercase' => true]);
+        $pagesWithSlug = Page::where('slug', $slug)->get();
+
+        if($pagesWithSlug->count() <> 0) {
+            $slug = $slug . "-1";  
+        }
+
+        return $slug;
+    }
+
+    protected function validateRequest($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'description' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect(route('page.create'))
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+    }
+
+    public function uploadImage(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'upload' => 'required|image',
+        ]);
+    
+        $funcNum = $request->input('CKEditorFuncNum');
+    
+        if ($validator->fails()) {
+            return response(
+                "<script>
+                    window.parent.CKEDITOR.tools.callFunction({$funcNum}, '', '{$validator->errors()->first()}');
+                </script>"
+            );
+        }
+    
+        $image = $request->file('upload');
+        $image->store('public/uploads');
+        $url = asset('storage/uploads/'.$image->hashName());
+    
+        return response(
+            "<script>
+                window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', 'Изображение успешно загружено');
+            </script>"
+        );
     }
 }
