@@ -9,27 +9,27 @@
 
                 <div class="starter-template">
                     <div class="media">
-                    <img class="media-object pull-left"alt="{{$album->name}}" src="/albums/{{$album->cover_image}}" width="350px">
+                    <img class="media-object pull-left" alt="{{$album->name}}" src="/albums/{{$album->cover_image}}" width="350px">
                     <div class="media-body">
-                        <h2 class="media-heading" style="font-size: 26px;">Album Name:</h2>
+                        <h2 class="media-heading" style="font-size: 26px">Название фотогалереи:</h2>
                         <p>{{$album->name}}</p>
                     <div class="media">
-                    <h2 class="media-heading" style="font-size: 26px;">AlbumDescription :</h2>
+                    <h2 class="media-heading" style="font-size: 26px">Описание фотогалереи :</h2>
                     <p>{{$album->description}}<p>
-                    <a href="{{URL::route('add_image',array('id'=>$album->id))}}"><button type="button"class="btn btn-primary btn-large">Add New Image to Album</button></a>
-                    <a href="{{URL::route('delete_album',array('id'=>$album->id))}}" onclick="return confirm('Are yousure?')"><button type="button"class="btn btn-danger btn-large">Delete Album</button></a>
+                    <a href="{{route('image.create', $album->id)}}"><button type="button"class="btn btn-primary btn-large">Добавить изображение в фотогалерею</button></a>
+                    <a href="{{route('album.delete', $album->id)}}" onclick="return confirm('Вы уверены?')"><button type="button"class="btn btn-danger btn-large">Удалить фотогалерею</button></a>
                     </div>
                 </div>
 
                 <div class="row">
                     @foreach($album->Photos as $photo)
                     <div class="col-lg-3">
-                        <div class="thumbnail" style="max-height: 350px;min-height: 350px;">
+                        <div class="thumbnail" style="max-height: 350px, min-height: 350px">
                         <img alt="{{$album->name}}" src="/albums/{{$photo->image}}">
                         <div class="caption">
                             <p>{{$photo->description}}</p>
-                            <p><p>Created date:  {{ date("d F Y",strtotime($photo->created_at)) }} at {{ date("g:ha",strtotime($photo->created_at)) }}</p></p>
-                            <a href="{{URL::route('delete_image',array('id'=>$photo->id))}}" onclick="return confirm('Are you sure?')"><button type="button" class="btnbtn-danger btn-small">Delete Image </button></a>
+                            <p><p>Дата создания:  {{ date("d F Y",strtotime($photo->created_at)) }} в {{ date("g:ha",strtotime($photo->created_at)) }}</p></p>
+                            <a href="{{route('image.delete', $photo->id)}}" onclick="return confirm('Вы уверены?')"><button type="button" class="btn btn-danger btn-small">Удалить изображение</button></a>
                         </div>
                         </div>
                     </div>

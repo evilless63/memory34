@@ -65,7 +65,7 @@ class AlbumsController extends Controller
           'cover_image' => $filename,
         ));
      
-        return redirect(route('admin.album.show'), $album->id); 
+        return redirect(route('album.show', $album->id)); 
 
     }
 
@@ -77,7 +77,8 @@ class AlbumsController extends Controller
      */
     public function show($id)
     {
-        $album = Album::with('Photos')->find('id');
+        $album = Album::with('Photos')->find($id);
+        dd($album);
         return view('admin.album.show', compact('album'));
     }
 

@@ -20,6 +20,9 @@ Auth::routes();
 Route::resource('menu','MenuController');
 Route::resource('page','PageController');
 Route::resource('album','AlbumsController');
+Route::resource('image','ImagesController');
+
+Route::post('/admin/image/create/{id}', array('as' => 'create','uses' => 'ImagesController@create'));
 
 Route::get('/home', 'HomeController@index')->name('home');
 
