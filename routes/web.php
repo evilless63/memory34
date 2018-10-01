@@ -19,6 +19,7 @@ Auth::routes();
 
 Route::resource('menu','MenuController');
 Route::resource('page','PageController');
+Route::resource('album','AlbumsController');
 
 Route::get('/home', 'HomeController@index')->name('home');
 

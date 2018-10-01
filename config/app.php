@@ -220,6 +220,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        //Емельянов В.Ю. 01.10.2018 - Алиас input
+        'Input' => Illuminate\Support\Facades\Input::class,
+
         //Емельянов В.Ю. 27.08.2018 - Алиас меню
         'Menu'      => Lavary\Menu\Facade::class,
 

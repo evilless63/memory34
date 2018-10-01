@@ -54,6 +54,9 @@
                         <li class="nav-item">
                                 <a class="nav-link" href="{{ route('page.index') }}">Управление страницами</a>
                         </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ route('album.index') }}">Управление фотогалереями</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
