@@ -63,15 +63,15 @@
                             <select class="form-control" id="path" name="path" value="1">
 
                                 @if($actual_page === Null)
-                                    <option value="">Нет родительского пункта</option>
+                                    <option value="">Не указана страница</option>
                                     @foreach($all_pages as $page)
-                                        <option value="{{ route('page.show', $page->id) }}">{{ $page->title }}</option>
+                                        <option value="{{ $page->id }}">{{ $page->title }}</option>
                                     @endforeach
                                 @else
                                     <option value="{{ route('page.show', $actual_page->id) }}">{{ $actual_page->title }}</option>
                                     @foreach($all_pages as $page)
                                         @if ($page->id <> $actual_page->id)
-                                        <option value="{{ route('page.show', $page->id) }}">{{ $page->title }}</option>
+                                        <option value="{{ $page->id }}">{{ $page->title }}</option>
                                         @endif
                                     @endforeach
                                 @endif

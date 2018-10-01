@@ -19,7 +19,6 @@ class AddMenuTable extends Migration
             $table->string('title');
             $table->integer('is_active')->default(0);
             $table->integer('is_footer')->default(0);
-            $table->string('path')->nullable();
             $table->integer('parent_id')->nullable();
             $table->integer('order')->nullable();
         });

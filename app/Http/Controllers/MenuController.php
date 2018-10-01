@@ -51,7 +51,10 @@ class MenuController extends Controller
 
         $this->validateRequest($request);
 
-        Menu::create($request->all());   
+        $menuItem = Menu::create($request->all());   
+
+        $page = Page::findOrFail($request->path);
+        $menuItem->pages()->attach($page);
 
         return redirect(route('menu.index'));    
     }
@@ -77,12 +80,17 @@ class MenuController extends Controller
     {
         $menu = Menu::findorfail($id);
         $parent_menu_actual = Menu::find($menu->parent_id);
-        $parent_menus = Menu::where('id', '<>', $id )->get();
+        $parent_menus = Menu::where('id','<>',$id)->get();
 
-        $actual_page = Page::where('menu_id', $id)->get();
-        $all_pages = Page::where('menu_id', '<>', $id)->get();
-        dd($all_pages);
-        return view('admin.menu.edit', compact('menu','parent_menus','parent_menu_actual','actual_page','all_pages'));
+        $actual_page = count($menu->pages) > 0 ? $menu->pages[0] : null ;
+    
+        if(isset($actual_page)) {
+            $all_pages = Page::where('id', '<>', $actual_page->id)->get();
+        } else {
+            $all_pages = Page::all();
+        }
+
+        return view('admin.menu.edit', compact('menu','parent_menu_actual', 'parent_menus', 'actual_page', 'all_pages'));
     }
 
     /**
@@ -96,8 +104,15 @@ class MenuController extends Controller
     {
         
         $this->validateRequest($request);
+        $menu = Menu::findOrfail($id);
 
-        Menu::where('id', $id)->update($request->except('_method','_token'));  
+        $menuItem = count($menu->pages) > 0 ? $menu->pages[0] : null;
+        $menu->pages()->detach($menuItem);
+
+        $page = Page::findOrFail($request->path);
+        $menu->pages()->attach($page);
+
+        $menu->update($request->except('_method','_token', 'path'));  
 
         $reqArray = ['is_active' => $request->is_active, 'is_footer' => $request->is_footer];
         $this->setRequisites($id, $reqArray);
@@ -113,7 +128,11 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        Menu::findorfail($id)->delete();
+        $menu = Menu::findorfail($id);
+        $actual_page = count($menu->pages) > 0 ? $menu->pages[0] : null;
+        $menu->pages()->detach($actual_page);
+        $menu->delete();
+
         $children = Menu::where('parent_id', $id)->get();
 
         foreach($children as $child) {

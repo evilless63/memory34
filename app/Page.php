@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
-    protected $fillable = ['title','description','meta_desc', 'meta_keys','slug'];
+    protected $fillable = ['title','meta_desc', 'meta_keys','slug'];
 
-    public function page()
+    public function menus()
     {
-        return $this->belongsTo('App\Menu');
+        return $this->belongsToMany('App\Menu');
     }
 }

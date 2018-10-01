@@ -99,7 +99,12 @@ class PageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $page = Page::findorfail($id);
+        $actual_menu = count($page->menus) > 0 ? $page->menus[0] : null;
+        $page->menus()->detach($actual_menu);
+        $page->delete();
+
+        return redirect(route('page.index'));
     }
 
     protected function makeSlug($request)
@@ -119,7 +124,6 @@ class PageController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'description' => 'required',
         ]);
 
         if ($validator->fails()) {

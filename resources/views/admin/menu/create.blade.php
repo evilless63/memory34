@@ -39,7 +39,7 @@
                             <select class="form-control" id="path" name="path" value="1">
                                 <option value="">Не ссылается на страницу</option>
                                 @foreach($pages as $page)
-                                    <option value="{{ route('page.show', $page->id) }}">{{ $page->title }}</option>
+                                    <option value="{{ $page->id }}">{{ $page->title }}</option>
                                 @endforeach
                             </select>
                         </div>
