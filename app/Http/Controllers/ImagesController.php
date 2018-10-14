@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 use App\Album;
+use App\Image;
 
 class ImagesController extends Controller
 {
@@ -36,7 +40,33 @@ class ImagesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = array(
+
+            'album_id' => 'required|numeric|exists:albums,id',
+            'image'=>'required|image'
+        
+        );
+        
+        $validator = Validator::make(Input::all(), $rules);
+        if($validator->fails()){
+            return Redirect::route('add_image',array('id' =>Input::get('album_id')))
+            ->withErrors($validator)
+            ->withInput();
+        }
+    
+        $file = Input::file('image');
+        $random_name = str_random(8);
+        $destinationPath = 'albums/';
+        $extension = $file->getClientOriginalExtension();
+        $filename=$random_name.'_album_image.'.$extension;
+        $uploadSuccess = Input::file('image')->move($destinationPath, $filename);
+        Image::create(array(
+            'description' => Input::get('description'),
+            'image' => $filename,
+            'album_id'=> Input::get('album_id')
+        ));
+    
+        return Redirect::route('album.show', array('id'=>Input::get('album_id')));
     }
 
     /**
@@ -81,6 +111,31 @@ class ImagesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $image = Image::find($id);
+        $albumId = $image->album_id;
+        $image->delete();
+        
+        return Redirect::route('album.show', array('id'=>$albumId));
+    }
+
+    public function postMove(Request $request)
+    {
+    $rules = array(
+
+        'new_album' => 'required|numeric|exists:albums,id',
+        'photo'=>'required|numeric|exists:images,id'
+
+    );
+
+    $validator = Validator::make($request::all(), $rules);
+        if($validator->fails()){
+
+            return Redirect::route('index');
+        }
+
+        $image = Image::find($request::get('photo'));
+        $image->album_id = $request::get('new_album');
+        $image->save();
+        return Redirect::route('album.show',array('id'=>$request::get('new_album')));
     }
 }

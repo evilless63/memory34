@@ -78,8 +78,8 @@ class AlbumsController extends Controller
     public function show($id)
     {
         $album = Album::with('photos')->find($id);
-        dd($album);
-        return view('admin.album.show', compact('album'));
+        $otherAlbums = Album::where('id', '<>', $id)->get();
+        return view('admin.album.show', compact('album','otherAlbums'));
     }
 
     /**

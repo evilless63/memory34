@@ -12,4 +12,9 @@ class Page extends Model
     {
         return $this->belongsToMany('App\Menu');
     }
+
+    public function albums()
+    {
+        return $this->belongsToMany('App\Album');
+    }
 }

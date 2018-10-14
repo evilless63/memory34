@@ -7,35 +7,56 @@
             <div class="card">
                 <div class="card-header">Все фотогаллереи | <a href="{{ route('album.create') }}">Создать фотогалерею</a></div>
 
-                <div class="starter-template">
-                    <div class="media">
-                    <img class="media-object pull-left" alt="{{$album->name}}" src="/albums/{{$album->cover_image}}" width="350px">
-                    <div class="media-body">
-                        <h2 class="media-heading" style="font-size: 26px">Название фотогалереи:</h2>
-                        <p>{{$album->name}}</p>
-                    <div class="media">
-                    <h2 class="media-heading" style="font-size: 26px">Описание фотогалереи :</h2>
-                    <p>{{$album->description}}<p>
-                    <a href="{{route('image.create', $album->id)}}"><button type="button"class="btn btn-primary btn-large">Добавить изображение в фотогалерею</button></a>
-                    <a href="{{route('album.delete', $album->id)}}" onclick="return confirm('Вы уверены?')"><button type="button"class="btn btn-danger btn-large">Удалить фотогалерею</button></a>
-                    </div>
-                </div>
-
-                <div class="row">
-                    @foreach($album->Photos as $photo)
-                    <div class="col-lg-3">
-                        <div class="thumbnail" style="max-height: 350px, min-height: 350px">
-                        <img alt="{{$album->name}}" src="/albums/{{$photo->image}}">
-                        <div class="caption">
-                            <p>{{$photo->description}}</p>
-                            <p><p>Дата создания:  {{ date("d F Y",strtotime($photo->created_at)) }} в {{ date("g:ha",strtotime($photo->created_at)) }}</p></p>
-                            <a href="{{route('image.delete', $photo->id)}}" onclick="return confirm('Вы уверены?')"><button type="button" class="btn btn-danger btn-small">Удалить изображение</button></a>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <img class="media-object pull-left" alt="{{$album->name}}" src="/albums/{{$album->cover_image}}" width="350px">
                         </div>
+                        <div class="col">
+                        <a href="{{route('image.create', $album->id)}}"><button type="button"class="btn btn-primary btn-large">Добавить изображение в фотогалерею</button></a>
+                            <a href="{{route('album.destroy', $album->id)}}" onclick="return confirm('Вы уверены?')"><button type="button"class="btn btn-danger btn-large">Удалить фотогалерею</button></a>
                         </div>
                     </div>
-                    @endforeach
+                    <div class="row">
+                        <div class="col">
+                            <h2 class="media-heading" style="font-size: 26px">{{$album->name}}</h2>
+                            
+                            <h5>{{$album->description}}</h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        @foreach($album->Photos as $photo)
+                        <div class="col-lg-3">
+                            <div class="thumbnail" style="max-height: 350px, min-height: 350px">
+                            <img class="img-fluid" alt="{{$album->name}}" src="/albums/{{$photo->image}}">
+                            <div class="caption">
+                                <p>{{$photo->description}}</p>
+                                <p><p>Дата создания:  {{ date("d F Y",strtotime($photo->created_at)) }} в {{ date("g:ha",strtotime($photo->created_at)) }}</p></p>
+                                <form action="{{route('image.destroy', $photo->id)}}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('Вы уверены?')">Удалить изображение </button>
+                                </form>
+                                @if($otherAlbums->isNotEmpty())
+                                <p>Переместить в другой Альбом :</p>
+                                <form name="movephoto" method="POST"action="{{route('image.move', $photo->id)}}">
+                                    @csrf
+                                    <select name="new_album">
+                                        @foreach($otherAlbums as $others)
+                                        <option value="{{$others->id}}">{{$others->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" name="photo" value="{{$photo->id}}" />
+                                    <button type="submit" class="btn btn-smallbtn-info" onclick="return confirm('Вы уверены?')">Переместить изображения</button>
+                                </form>
+                                @endif
+                            </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>

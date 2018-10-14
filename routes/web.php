@@ -20,10 +20,15 @@ Auth::routes();
 Route::resource('menu','MenuController');
 Route::resource('page','PageController');
 Route::resource('album','AlbumsController');
-Route::resource('image','ImagesController');
+Route::resource('image','ImagesController')->except(['create']);
 
-Route::post('/admin/image/create/{id}', array('as' => 'create','uses' => 'ImagesController@create'));
+Route::get('image/create/{id}', 'ImagesController@create')->name('image.create');
+Route::get('image/move/{id}', 'ImagesController@postMove')->name('image.move');
+
+// Route::post('/admin/image/create/{id}', array('as' => 'create','uses' => 'ImagesController@create'));
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/admin/page/upload-image', 'PageController@uploadImage');
+
+

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Page;
+use App\Album;
 use Validator;
 use Transliterate;
 
@@ -72,7 +73,8 @@ class PageController extends Controller
     public function edit($id)
     {
         $page = Page::findorfail($id);
-        return view('admin.page.edit', compact('page'));
+        $albums = Album::whereNotIn('id',$page->albums()->get()->pluck('id'))->get();
+        return view('admin.page.edit', compact('page','albums'));
     }
 
     /**
@@ -86,7 +88,10 @@ class PageController extends Controller
     {
         $this->validateRequest($request);
 
-        Page::where('id', $id)->update($request->except('_method','_token'));  
+        $page = Page::findorfail($id);
+        $page->update($request->except('_method','_token'));  
+        $albums = Album::find([$request->albums]);
+        $page->albums()->attach($albums);
 
         return redirect(route('page.index'));
     }
@@ -102,6 +107,7 @@ class PageController extends Controller
         $page = Page::findorfail($id);
         $actual_menu = count($page->menus) > 0 ? $page->menus[0] : null;
         $page->menus()->detach($actual_menu);
+        $page->albums()->detach($page->albums());
         $page->delete();
 
         return redirect(route('page.index'));
