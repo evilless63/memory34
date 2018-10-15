@@ -73,7 +73,7 @@ class PageController extends Controller
     public function edit($id)
     {
         $page = Page::findorfail($id);
-        $albums = Album::whereNotIn('id',$page->albums()->get()->pluck('id'))->get();
+        $albums = Album::whereNotIn('id', $page->albums()->get()->pluck('id'))->get();
         return view('admin.page.edit', compact('page','albums'));
     }
 
@@ -90,10 +90,11 @@ class PageController extends Controller
 
         $page = Page::findorfail($id);
         $page->update($request->except('_method','_token'));  
-        $albums = Album::find([$request->albums]);
+        $albums = Album::find($request->albums);
         $page->albums()->attach($albums);
 
-        return redirect(route('page.index'));
+        $albums = Album::whereNotIn('id', $page->albums()->get()->pluck('id'))->get();
+        return view('admin.page.edit', compact('page','albums'));
     }
 
     /**
@@ -111,6 +112,14 @@ class PageController extends Controller
         $page->delete();
 
         return redirect(route('page.index'));
+    }
+
+    public function detachAlbum(Request $request)
+    {
+        $page = Page::findOrFail($request->pageId);
+        $page->albums()->detach($request->albumId);
+        $albums = Album::whereNotIn('id', $page->albums()->get()->pluck('id'))->get();
+        return view('admin.page.edit', compact('page','albums'));
     }
 
     protected function makeSlug($request)

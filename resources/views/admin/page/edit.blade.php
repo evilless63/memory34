@@ -44,39 +44,44 @@
                                         </textarea>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label for="meta_keys">Добавить альбомы на страницу</label>
+                                        <select name="albums[]" class="form-control" multiple searchable="Search here..">
+                                            <option value="" disabled selected>Выберите альбомы</option>
+                                            @foreach($albums as $album)
+                                            <option value="{{ $album->id }}">{{ $album->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <button type="submit" class="btn btn-primary">Обновить</button>
                                 </form>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                            <div class="h4">Добавить альбомы на страницу</div>
-                            <select name="albums[]" class="mdb-select md-form colorful-select dropdown-primary" multiple searchable="Search here..">
-                                <option value="" disabled selected>Выберите альбомы</option>
-                                @foreach($albums as $album)
-                                <option value="{{ $album->id }}">{{ $album->name }}</option>
-                                @endforeach
-                            </select>
-                            <label>Label example</label>
-                            </div>
-                        </div>
-                        @if($page->albums()->exists())
+
+                        @if($page->albums()->get()->isNotEmpty())
                         <div class="row">
                             <div class="col">
                                 <h4>Альбомы:</h4>
                             </div>
                         </div>
                         <div class="row">
-                            @foreach($page->albums() as $album)
+                            @foreach($page->albums()->get() as $album)
                             <div class="col-lg-4">
                                 <div class="thumbnail" style="min-height: 514px;">
                                     <img class="img-fluid" alt="{{$album->name}}" src="/albums/{{$album->cover_image}}">
                                     <div class="caption">
-                                    <h3>{{$album->name}}</h3>
-                                    <p>{{$album->description}}</p>
-                                    <p>{{count($album->Photos)}} изображений.</p>
-                                    <p>Дата создания:  {{ date("d F Y",strtotime($album->created_at)) }} в {{date("g:ha",strtotime($album->created_at)) }}</p>
-                                    <p><a href="{{route('album.show', $album->id)}}" class="btn btn-big btn-default">Открыть фотогалерею</a></p>
+                                        <h3>{{$album->name}}</h3>
+                                        <p>{{$album->description}}</p>
+                                        <p>{{count($album->Photos)}} изображений.</p>
+                                        <p>Дата создания:  {{ date("d F Y",strtotime($album->created_at)) }} в {{date("g:ha",strtotime($album->created_at)) }}</p>
+                                        <p><a href="{{route('album.show', $album->id)}}" class="btn btn-big btn-default">Открыть фотогалерею</a></p>
+                                        <form action="{{route('page.albumdetach')}}" method="POST">
+                                            @csrf
+                                            <input type="hidden" id="pageId" name="pageId"  value="{{ $page->id }}" >
+                                            <input type="hidden" id="albumId" name="albumId"  value="{{ $album->id }}" >
+                                            <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('Вы уверены?')">Убрать альбом со страницы </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

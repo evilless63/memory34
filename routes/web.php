@@ -22,8 +22,12 @@ Route::resource('page','PageController');
 Route::resource('album','AlbumsController');
 Route::resource('image','ImagesController')->except(['create']);
 
+Route::get('information/edit/', 'InformationController@editInfo')->name('information.edit');
+Route::post('information/update/', 'InformationController@update')->name('information.update');
+
 Route::get('image/create/{id}', 'ImagesController@create')->name('image.create');
-Route::get('image/move/{id}', 'ImagesController@postMove')->name('image.move');
+Route::post('image/move/', 'ImagesController@postMove')->name('image.move');
+Route::post('page/albumDetach/', 'PageController@detachAlbum')->name('page.albumdetach');
 
 // Route::post('/admin/image/create/{id}', array('as' => 'create','uses' => 'ImagesController@create'));
 

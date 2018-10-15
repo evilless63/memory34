@@ -59,6 +59,9 @@
                         <li class="nav-item">
                                 <a class="nav-link" href="{{ route('album.index') }}">Управление фотогалереями</a>
                         </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ route('information.edit') }}">Управление информацией</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

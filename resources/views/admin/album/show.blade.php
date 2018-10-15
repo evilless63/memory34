@@ -40,7 +40,7 @@
                                 </form>
                                 @if($otherAlbums->isNotEmpty())
                                 <p>Переместить в другой Альбом :</p>
-                                <form name="movephoto" method="POST"action="{{route('image.move', $photo->id)}}">
+                                <form name="movephoto" method="POST"action="{{route('image.move')}}">
                                     @csrf
                                     <select name="new_album">
                                         @foreach($otherAlbums as $others)
