@@ -35,4 +35,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/admin/page/upload-image', 'PageController@uploadImage');
 
+Route::get('mail/send', 'MailController@send')->name('mail.send');
+
 
