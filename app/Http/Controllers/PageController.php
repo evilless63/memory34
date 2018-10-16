@@ -47,6 +47,8 @@ class PageController extends Controller
 
         $this->validateRequest($request);
 
+        checkMainPage($request);
+
         Page::create(array_merge($request->all(), ['slug' => $this->makeSlug($request)]));   
 
         return redirect(route('page.index'));
@@ -87,8 +89,10 @@ class PageController extends Controller
     public function update(Request $request, $id)
     {
         $this->validateRequest($request);
-
+        
         $page = Page::findorfail($id);
+        checkMainPage($request);
+
         $page->update($request->except('_method','_token'));  
         $albums = Album::find($request->albums);
         $page->albums()->attach($albums);
@@ -106,9 +110,16 @@ class PageController extends Controller
     public function destroy($id)
     {
         $page = Page::findorfail($id);
+
+        if($page->is_main) {
+            return redirect(route('page.index'));
+        }
+
         $actual_menu = count($page->menus) > 0 ? $page->menus[0] : null;
         $page->menus()->detach($actual_menu);
-        $page->albums()->detach($page->albums());
+
+
+        $page->albums()->detach($page->albums);
         $page->delete();
 
         return redirect(route('page.index'));
@@ -174,5 +185,15 @@ class PageController extends Controller
                 window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', 'Изображение успешно загружено');
             </script>"
         );
+    }
+
+    protected function checkMainPage(Request $request){
+        if($request->is_main === 1) {
+            $mPage = Page::where('is_main', 1)->first();
+                if($mPage <> null){
+                    $mPage->is_main = false;
+                    $mPage->save();
+                }
+        }    
     }
 }

@@ -25,9 +25,14 @@
                                 <form action="{{ route('page.update', $page->id) }}" method="POST">
                                 @method('PATCH')
                                 @csrf
+                                    
                                     <div class="form-group">
                                         <label for="title">Наименование страницы</label>
                                         <input type="text" class="form-control" id="title" name="title" aria-describedby="title" placeholder="Наименование" value="{{ $page->title }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="meta_keys">Использовать как главную</label>
+                                        <input type="checkbox" class="form-control" id="is_main" name="is_main" aria-describedby="is_main" value="1" {{ $page->is_main == true ? checked : }}>
                                     </div>
                                     <div class="form-group">
                                         <label for="meta_desc">Мета описание (отображается как описание в поиске Google, Yandex) - не более 100 - 140 символов</label>

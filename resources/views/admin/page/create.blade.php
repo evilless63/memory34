@@ -26,6 +26,10 @@
                             <input type="text" class="form-control" id="title" name="title" aria-describedby="title" placeholder="Наименование">
                         </div>
                         <div class="form-group">
+                            <label for="meta_keys">Использовать как главную</label>
+                            <input type="checkbox" class="form-control" id="is_main" name="is_main" aria-describedby="is_main" value="1">
+                        </div>
+                        <div class="form-group">
                             <label for="meta_desc">Мета описание (отображается как описание в поиске Google, Yandex)  - не более 100 - 140 символов<</label>
                             <input type="text" class="form-control" id="meta_desc" name="meta_desc" aria-describedby="meta_desc" placeholder="Мета описание">
                         </div>
