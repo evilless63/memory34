@@ -62,6 +62,9 @@
                         <li class="nav-item">
                                 <a class="nav-link" href="{{ route('information.edit') }}">Управление информацией</a>
                         </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ route('user.edit') }}">Управление аккаунтом</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

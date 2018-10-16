@@ -102,16 +102,16 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+       
         $this->validateRequest($request);
+        
         $menu = Menu::findOrfail($id);
-
         $menuItem = count($menu->pages) > 0 ? $menu->pages[0] : null;
         $menu->pages()->detach($menuItem);
 
         $page = Page::findOrFail($request->path);
         $menu->pages()->attach($page);
-
+        
         $menu->update($request->except('_method','_token', 'path'));  
 
         $reqArray = ['is_active' => $request->is_active, 'is_footer' => $request->is_footer];

@@ -60,7 +60,7 @@ class PageController extends Controller
      */
     public function show($id)
     {
-        $page = Page::findorfail($id);
+        $page = Page::findorfail($id);        
         return view('admin.page.show', compact('page'));
     }
 

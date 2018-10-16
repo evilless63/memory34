@@ -57,7 +57,7 @@
                             @if($actual_page === Null)
                                 <label for="path">Ссылка на страницу</label>
                             @else
-                                <label for="path">Текущая ссылка на страницу - <strong>{{ $actual_page->title }}</strong>, новая ссылка на страницу:</label>
+                                <label for="path">Текущая ссылка на страницу - <a href="{{ route('page.show', $actual_page->id) }}"><strong>{{ $actual_page->title }}</strong></a>, новая ссылка на страницу:</label>
                             @endif
 
                             <select class="form-control" id="path" name="path" value="1">
@@ -65,10 +65,10 @@
                                 @if($actual_page === Null)
                                     <option value="">Не указана страница</option>
                                     @foreach($all_pages as $page)
-                                        <option value="{{ $page->id }}">{{ $page->title }}</option>
+                                        <option disabled="disabled" value="{{ $page->id }}">{{ $page->title }}</option>
                                     @endforeach
                                 @else
-                                    <option value="{{ route('page.show', $actual_page->id) }}">{{ $actual_page->title }}</option>
+                                    <option value="{{ $actual_page->id }}">{{ $actual_page->title }}</option>
                                     @foreach($all_pages as $page)
                                         @if ($page->id <> $actual_page->id)
                                         <option value="{{ $page->id }}">{{ $page->title }}</option>

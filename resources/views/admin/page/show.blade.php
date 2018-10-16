@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            @foreach($page->albums as album)
+                            @foreach($page->albums()->get() as $album)
                                 <div class="col-lg-4">
                                     <div class="thumbnail" style="min-height: 514px;">
                                         <img class="img-fluid" alt="{{$album->name}}" src="/albums/{{$album->cover_image}}">

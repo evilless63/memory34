@@ -35,6 +35,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/admin/page/upload-image', 'PageController@uploadImage');
 
-Route::get('mail/send', 'MailController@send')->name('mail.send');
+Route::post('mail/send', 'MailController@send')->name('mail.send');
+
+Route::get('/admin/user/edit', 'UserController@editProfile')->name('user.edit');
+Route::post('/admin/user/changepass', 'UserController@changePassword')->name('user.changepass');
 
 
