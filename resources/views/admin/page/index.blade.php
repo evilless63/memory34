@@ -20,6 +20,9 @@
                                         Удалить
                                     </button>
                                 </form>
+                                @if($page->is_main == 1)
+                                    <span><strong>Используется как Главная</strong></span>
+                                @endif
                             </li>
                         @endforeach
                         </ul>

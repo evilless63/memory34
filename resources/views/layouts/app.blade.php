@@ -51,16 +51,19 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                                <a class="nav-link" href="{{ route('menu.index') }}">Управление меню</a>
+                                <a class="nav-link" href="{{ route('admin.home') }}">Панель администратора</a>
                         </li>
                         <li class="nav-item">
-                                <a class="nav-link" href="{{ route('page.index') }}">Управление страницами</a>
+                                <a class="nav-link" href="{{ route('menu.index') }}">Меню</a>
                         </li>
                         <li class="nav-item">
-                                <a class="nav-link" href="{{ route('album.index') }}">Управление фотогалереями</a>
+                                <a class="nav-link" href="{{ route('page.index') }}">Страницы</a>
                         </li>
                         <li class="nav-item">
-                                <a class="nav-link" href="{{ route('information.edit') }}">Управление информацией</a>
+                                <a class="nav-link" href="{{ route('album.index') }}">Фотогалереи</a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ route('information.edit') }}">Информация о компании</a>
                         </li>
                         <li class="nav-item">
                                 <a class="nav-link" href="{{ route('user.edit') }}">Управление аккаунтом</a>

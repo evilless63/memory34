@@ -14,7 +14,7 @@ class AddMainPage extends Migration
     public function up()
     {
         Schema::table('pages', function (Blueprint $table) {
-            $table->boolean('is_main')->tinyInteger(false);
+            $table->tinyInteger('is_main')->default(0);
         });
     }
 

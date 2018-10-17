@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Page;
 use App\Album;
@@ -47,7 +47,7 @@ class PageController extends Controller
 
         $this->validateRequest($request);
 
-        checkMainPage($request);
+        $request = $this->checkMainPage($request);
 
         Page::create(array_merge($request->all(), ['slug' => $this->makeSlug($request)]));   
 
@@ -91,7 +91,7 @@ class PageController extends Controller
         $this->validateRequest($request);
         
         $page = Page::findorfail($id);
-        checkMainPage($request);
+        $request = $this->checkMainPage($request, $id);
 
         $page->update($request->except('_method','_token'));  
         $albums = Album::find($request->albums);
@@ -187,13 +187,21 @@ class PageController extends Controller
         );
     }
 
-    protected function checkMainPage(Request $request){
-        if($request->is_main === 1) {
-            $mPage = Page::where('is_main', 1)->first();
-                if($mPage <> null){
-                    $mPage->is_main = false;
-                    $mPage->save();
-                }
-        }    
+    protected function checkMainPage(Request $request, $id = 0){
+
+        $mPage = Page::where('is_main', 1)->where('id', '<>', $id)->first();
+ 
+        if((int)$request->is_main === 1) {
+            if($mPage <> null){
+                $mPage->is_main = 0;
+                $mPage->save();
+            } 
+        } elseif((int)$request->is_main === 0) {
+            if($mPage == null){
+                $request->merge(['is_main' => 1]);
+            } 
+        }
+
+        return $request;
     }
 }

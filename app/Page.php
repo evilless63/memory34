@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
-    protected $fillable = ['title','meta_desc', 'meta_keys','slug'];
+    protected $fillable = ['title','meta_desc', 'meta_keys','slug','is_main'];
 
     public function menus()
     {

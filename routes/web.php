@@ -17,27 +17,34 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::resource('menu','MenuController');
-Route::resource('page','PageController');
-Route::resource('album','AlbumsController');
-Route::resource('image','ImagesController')->except(['create']);
+Route::group([
+    'namespace' => '\Admin',
+], function()
+{
+    Route::resource('admin/menu','MenuController');
+    Route::resource('admin/page','PageController');
+    Route::resource('admin/album','AlbumsController');
+    Route::resource('admin/image','ImagesController')->except(['create']);
 
-Route::get('information/edit/', 'InformationController@editInfo')->name('information.edit');
-Route::post('information/update/', 'InformationController@update')->name('information.update');
+    Route::get('admin/information/edit/', 'InformationController@editInfo')->name('information.edit');
+    Route::post('admin/information/update/', 'InformationController@update')->name('information.update');
 
-Route::get('image/create/{id}', 'ImagesController@create')->name('image.create');
-Route::post('image/move/', 'ImagesController@postMove')->name('image.move');
-Route::post('page/albumDetach/', 'PageController@detachAlbum')->name('page.albumdetach');
+    Route::get('admin/image/create/{id}', 'ImagesController@create')->name('image.create');
+    Route::post('admin/image/move/', 'ImagesController@postMove')->name('image.move');
+    Route::post('admin/page/albumDetach/', 'PageController@detachAlbum')->name('page.albumdetach');
 
-// Route::post('/admin/image/create/{id}', array('as' => 'create','uses' => 'ImagesController@create'));
+    Route::post('/admin/page/upload-image', 'PageController@uploadImage');
+
+    Route::post('admin/mail/send', 'MailController@send')->name('mail.send');
+
+    Route::get('/admin/user/edit', 'UserController@editProfile')->name('user.edit');
+    Route::post('/admin/user/changepass', 'UserController@changePassword')->name('user.changepass');
+
+    Route::get('/admin', 'HomeController@index')->name('admin.home');
+});
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::post('/admin/page/upload-image', 'PageController@uploadImage');
 
-Route::post('mail/send', 'MailController@send')->name('mail.send');
-
-Route::get('/admin/user/edit', 'UserController@editProfile')->name('user.edit');
-Route::post('/admin/user/changepass', 'UserController@changePassword')->name('user.changepass');
 
 

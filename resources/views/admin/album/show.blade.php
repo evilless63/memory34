@@ -14,7 +14,11 @@
                         </div>
                         <div class="col">
                         <a href="{{route('image.create', $album->id)}}"><button type="button"class="btn btn-primary btn-large">Добавить изображение в фотогалерею</button></a>
-                            <a href="{{route('album.destroy', $album->id)}}" onclick="return confirm('Вы уверены?')"><button type="button"class="btn btn-danger btn-large">Удалить фотогалерею</button></a>
+                        <form action="{{route('album.destroy', $album->id)}}" method="POST">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('Вы уверены?')">Удалить фотогалерею</button>
+                        </form>
                         </div>
                     </div>
                     <div class="row">
