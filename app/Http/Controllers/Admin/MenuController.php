@@ -143,28 +143,7 @@ class MenuController extends Controller
         return redirect(route('menu.index'));
     }
 
-    public function buildMenu ($arrMenu){
-        $mBuilder = LavMenu::make('MyNav', function($m) use ($arrMenu){
-            foreach($arrMenu as $item){
-                /*
-                 * Для родительского пункта меню формируем элемент меню в корне
-                 * и с помощью метода id присваиваем каждому пункту идентификатор
-                 */
-                if($item->parent_id == 0){
-                    $m->add($item->title, $item->path)->id($item->id)->attr(['is_active' => $item->is_active, 'is_footer' => $item->is_footer]);
-                }
-                //иначе формируем дочерний пункт меню
-                else {
-                    //ищем для текущего дочернего пункта меню в объекте меню ($m)
-                    //id родительского пункта (из БД)
-                    if($m->find($item->parent_id)){
-                        $m->find($item->parent_id)->add($item->title, $item->path)->id($item->id)->attr(['is_active' => $item->is_active, 'is_footer' => $item->is_footer]);
-                   }
-                }
-            }
-        });
-        return $mBuilder;
-    }
+    
 
     protected function setRequisites ($parentId, $reqArray) {
         $children = Menu::where('parent_id', $parentId)->get();

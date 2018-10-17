@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
 
@@ -43,7 +43,14 @@ Route::group([
     Route::get('/admin', 'HomeController@index')->name('admin.home');
 });
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group([
+    'namespace' => '\Client',
+], function()
+{
+    Route::get('/','SiteController@showMainPage');
+});
+
+// Route::get('/home', 'HomeController@index')->name('home');
 
 
 
