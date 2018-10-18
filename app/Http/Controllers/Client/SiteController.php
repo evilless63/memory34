@@ -20,7 +20,11 @@ class SiteController extends Controller
     {
         $page = Page::where('is_main', 1)->first();
         $menus = $this->menus;
-        dd($menus);
         return view('client.page.show', compact('page','menus'));
+    }
+
+    public function showPage()
+    {
+
     }
 }
