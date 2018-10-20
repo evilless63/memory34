@@ -13,7 +13,7 @@ class MenuController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth', ['except' => array('show')]);
+        $this->middleware('auth');
     }
 
     /**
@@ -51,9 +51,9 @@ class MenuController extends Controller
 
         $this->validateRequest($request);
 
-        $menuItem = Menu::create($request->all());   
-
         $page = Page::findOrFail($request->path);
+
+        $menuItem = Menu::create($request->all()); 
         $menuItem->pages()->attach($page);
 
         return redirect(route('menu.index'));    

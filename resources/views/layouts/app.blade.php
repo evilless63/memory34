@@ -38,11 +38,16 @@
 </head>
 <body>
     <div id="app">
+        @guest
+
+        @else
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
+                
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Memory34') }}
                 </a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -100,7 +105,7 @@
                 </div>
             </div>
         </nav>
-
+        @endguest
         <main class="py-4">
             @yield('content')
         </main>

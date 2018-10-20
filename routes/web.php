@@ -48,6 +48,7 @@ Route::group([
 ], function()
 {
     Route::get('/','SiteController@showMainPage');
+    Route::get('/{slug}','SiteController@showPage')->name('client.page.show');
 });
 
 // Route::get('/home', 'HomeController@index')->name('home');

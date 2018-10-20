@@ -12,7 +12,7 @@
         @if($item->hasChildren())
             <ul class="sub-menu">
                 <!--метод children() возвращает дочерние пункты меню для текущего пункта-->
-                @include(env('THEME').'admin.includes.menuItems', ['items'=>$item->children()])
+                @include(env('THEME').'client.includes.menuItems', ['items'=>$item->children()])
             </ul>
         @endif
     </li>
