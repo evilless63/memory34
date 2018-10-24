@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Page;
+
 use App\Album;
-use Validator;
+use App\Http\Controllers\Controller;
+use App\Page;
+use Illuminate\Http\Request;
 use Transliterate;
+use Validator;
 
 class PageController extends Controller
 {
@@ -23,7 +24,7 @@ class PageController extends Controller
     public function index()
     {
         $pages = Page::all();
-        return view('admin.page.index', compact('pages'));  
+        return view('admin.page.index', compact('pages'));
     }
 
     /**
@@ -39,7 +40,7 @@ class PageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -49,7 +50,7 @@ class PageController extends Controller
 
         $request = $this->checkMainPage($request);
 
-        Page::create(array_merge($request->all(), ['slug' => $this->makeSlug($request)]));   
+        Page::create(array_merge($request->all(), ['slug' => $this->makeSlug($request)]));
 
         return redirect(route('page.index'));
     }
@@ -57,61 +58,61 @@ class PageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $page = Page::findorfail($id);        
+        $page = Page::findorfail($id);
         return view('admin.page.show', compact('page'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $page = Page::findorfail($id);
         $albums = Album::whereNotIn('id', $page->albums()->get()->pluck('id'))->get();
-        return view('admin.page.edit', compact('page','albums'));
+        return view('admin.page.edit', compact('page', 'albums'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $this->validateRequest($request);
-        
+
         $page = Page::findorfail($id);
         $request = $this->checkMainPage($request, $id);
 
-        $page->update($request->except('_method','_token'));  
+        $page->update($request->except('_method', '_token'));
         $albums = Album::find($request->albums);
         $page->albums()->attach($albums);
 
         $albums = Album::whereNotIn('id', $page->albums()->get()->pluck('id'))->get();
-        return view('admin.page.edit', compact('page','albums'));
+        return view('admin.page.edit', compact('page', 'albums'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $page = Page::findorfail($id);
 
-        if($page->is_main) {
+        if ($page->is_main) {
             return redirect(route('page.index'));
         }
 
@@ -130,7 +131,7 @@ class PageController extends Controller
         $page = Page::findOrFail($request->pageId);
         $page->albums()->detach($request->albumId);
         $albums = Album::whereNotIn('id', $page->albums()->get()->pluck('id'))->get();
-        return view('admin.page.edit', compact('page','albums'));
+        return view('admin.page.edit', compact('page', 'albums'));
     }
 
     protected function makeSlug($request)
@@ -139,8 +140,8 @@ class PageController extends Controller
         $slug = Transliterate::make($request->title, ['type' => 'url', 'lowercase' => true]);
         $pagesWithSlug = Page::where('slug', $slug)->get();
 
-        if($pagesWithSlug->count() <> 0) {
-            $slug = $slug . "-1";  
+        if ($pagesWithSlug->count() <> 0) {
+            $slug = $slug . "-1";
         }
 
         return $slug;
@@ -154,8 +155,8 @@ class PageController extends Controller
 
         if ($validator->fails()) {
             return redirect(route('page.create'))
-                        ->withErrors($validator)
-                        ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
     }
 
@@ -165,9 +166,9 @@ class PageController extends Controller
         $validator = Validator::make($request->all(), [
             'upload' => 'required|image',
         ]);
-    
+
         $funcNum = $request->input('CKEditorFuncNum');
-    
+
         if ($validator->fails()) {
             return response(
                 "<script>
@@ -175,11 +176,11 @@ class PageController extends Controller
                 </script>"
             );
         }
-    
+
         $image = $request->file('upload');
         $image->store('public/uploads');
-        $url = asset('storage/uploads/'.$image->hashName());
-    
+        $url = asset('storage/uploads/' . $image->hashName());
+
         return response(
             "<script>
                 window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', 'Изображение успешно загружено');
@@ -187,19 +188,20 @@ class PageController extends Controller
         );
     }
 
-    protected function checkMainPage(Request $request, $id = 0){
+    protected function checkMainPage(Request $request, $id = 0)
+    {
 
         $mPage = Page::where('is_main', 1)->where('id', '<>', $id)->first();
- 
-        if((int)$request->is_main === 1) {
-            if($mPage <> null){
+
+        if ((int)$request->is_main === 1) {
+            if ($mPage <> null) {
                 $mPage->is_main = 0;
                 $mPage->save();
-            } 
-        } elseif((int)$request->is_main === 0) {
-            if($mPage == null){
+            }
+        } elseif ((int)$request->is_main === 0) {
+            if ($mPage == null) {
                 $request->merge(['is_main' => 1]);
-            } 
+            }
         }
 
         return $request;

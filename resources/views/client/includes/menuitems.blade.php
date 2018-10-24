@@ -1,19 +1,23 @@
 @foreach($items as $item)
     @if($item->attr('is_active') !== 1)
-        @continue    
+        @continue
     @endif
-    <!--Добавляем класс active для активного пункта меню-->
-    <li {{ (URL::current() == $item->url()) ? "class=active" : '' }}>
-        <!-- метод url() получает ссылку на пункт меню (указана вторым параметром
-        при создании объекта LavMenu)-->
-        <a href="{{ $item->url() }}">{{ $item->title }}</a> 
-        <!--Формируем дочерние пункты меню
-        метод haschildren() проверяет наличие дочерних пунктов меню-->
-        @if($item->hasChildren())
-            <ul class="sub-menu">
-                <!--метод children() возвращает дочерние пункты меню для текущего пункта-->
+
+    @if($item->hasChildren())
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                {{ $item->title }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 @include(env('THEME').'client.includes.menuItems', ['items'=>$item->children()])
-            </ul>
-        @endif
-    </li>
+            </div>
+        </li>
+    @elseIf($item->hasParent())
+        <a class="dropdown-item" href="{{ $item->url() }}">{{ $item->title }}</a>
+    @else
+        <li {{ (URL::current() == $item->url()) ? "class=active nav-item" : "class=nav-item" }}>
+            <a class="nav-link" href="{{ $item->url() }}">{{ $item->title }}</a>
+        </li>
+    @endif
 @endforeach
